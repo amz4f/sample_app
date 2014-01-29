@@ -33,7 +33,9 @@ describe "Authentication" do
   	  end
 
   	  it { should have_title(user.name) }
-  	  it { should have_link('Profile', href: user_path(user)) }
+  	  it { should have_link('Users',       href: users_path) }
+      it { should have_link('Settings',    href: edit_user_path(user)) }  
+      it { should have_link('Profile', href: user_path(user)) }
   	  it { should have_link('Sign out', href: signout_path) }
   	  it { should_not have_link('Sign in', href: signin_path) }
 
@@ -44,22 +46,15 @@ describe "Authentication" do
   	end
   end
 
-  describe "with valid information" do
-    let(:user) { FactoryGirl.create(:user) }
-    before { sign_in user }
-
-    it { should have_title(user.name) }
-    it { should have_link('Users',       href: users_path) }
-    it { should have_link('Profile',     href: user_path(user)) }
-    it { should have_link('Settings',    href: edit_user_path(user)) }
-    it { should have_link('Sign out',    href: signout_path) }
-    it { should_not have_link('Sign in', href: signin_path) }
-  end
-
   describe "authorization" do
 
     describe "for non-signed-in users" do
       let(:user) { FactoryGirl.create(:user) }
+
+      it "shouldn't have 'Profile' or 'Settings' links" do
+        expect(page).not_to have_link('Profile')
+        expect(page).not_to have_link('Settings')
+      end
 
       describe "when attempting to visit a protected page" do
         before do
