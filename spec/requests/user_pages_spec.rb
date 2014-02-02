@@ -64,6 +64,11 @@ describe "UserPages" do
       it { should have_content(m1.content) }
       it { should have_content(m2.content) }
       it { should have_content(user.microposts.count) }
+      
+      describe "sidebar micropost count and pluralization" do
+        before { visit root_path }
+        it { should have_content("2 microposts") }
+      end      
     end
   end
   
